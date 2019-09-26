@@ -17,7 +17,5 @@ casting1 = Casting.new({'movie_id' => movie1.id, "star_id" => star1.id, 'fee' =>
 casting1.save()
 
 
-
-
 binding.pry
 nil
