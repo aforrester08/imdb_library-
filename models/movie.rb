@@ -18,7 +18,19 @@ class Movie
     RETURNING id;"
     values = [@title, @genre]
     movie = SqlRunner.run(sql, values).first()
-    @id = movie['id'].to_i() 
+    @id = movie['id'].to_i()
   end
 
+  def update()
+    sql = "UPDATE movies SET (title, genre)
+      = ($1, $2 ) WHERE id = $3"
+    values = [@title, @genre, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def self.all()
+    sql = "SELECT * FROM movies"
+    movies = SqlRunner.run(sql)
+    return movies.map { |movie| Movie.new(movie) }
+  end
 end

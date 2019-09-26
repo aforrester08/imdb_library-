@@ -5,7 +5,7 @@ require_relative("star")
 class Casting
 
   attr_reader :id
-  attr_accessor :first_name, :last_name
+  attr_accessor :fee, :movie_id, :star_id
 
   def initialize( options )
     @id = options['id'].to_i() if options['id']
@@ -20,7 +20,20 @@ class Casting
     RETURNING id;"
     values = [@movie_id, @star_id, @fee]
     casting = SqlRunner.run(sql, values).first()
-    @id = casting['id'].to_i() 
+    @id = casting['id'].to_i()
+  end
+
+  def update()
+    sql = "UPDATE castings SET (movie_id, star_id, fee)
+      = ($1, $2, $3 ) WHERE id = $4"
+    values = [@movie_id, @star_id, @fee, @id]
+    SqlRunner.run(sql, values)
+  end
+
+  def self.all()
+    sql = "SELECT * FROM castings"
+    castings = SqlRunner.run(sql)
+    return castings.map { |casting| Casting.new(casting) }
   end
 
 end
